@@ -61,15 +61,22 @@ public class MainActivity extends ActionBarActivity {
     public static class PlaceholderFragment extends Fragment {
         final String TAG = "PlaceholderFragment";
 
+        MovieData movieData;
+
         public PlaceholderFragment() {
+        }
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setRetainInstance(true);
+            movieData = new MovieData();
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
-            final MovieData movieData = new MovieData();
 
             RecyclerView moviesRecyclerView = (RecyclerView) rootView.findViewById(R.id.cardList);
             moviesRecyclerView.setHasFixedSize(true);
