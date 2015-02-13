@@ -1,15 +1,20 @@
 package com.almasapp.hw4.almasapp4;
 
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
+import android.widget.Toast;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -60,6 +65,30 @@ public class MainActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+            final MovieData movieData = new MovieData();
+
+            RecyclerView moviesRecyclerView = (RecyclerView) rootView.findViewById(R.id.cardList);
+            moviesRecyclerView.setHasFixedSize(true);
+            moviesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+            //set adapter
+            final MyRecyclerViewAdapter myRecyclerViewAdapter = new MyRecyclerViewAdapter(getActivity(), movieData.getMoviesList());
+            myRecyclerViewAdapter.SetOnItemClickListener(new MyRecyclerViewAdapter.OnItemClickListener() {
+                @Override
+                public void OnItemLongClick(View view, int position) {
+                    movieData.getMoviesList().add(position, (HashMap) ((HashMap) movieData.getItem(position)).clone());
+                    myRecyclerViewAdapter.notifyItemChanged(position);
+                }
+
+                @Override
+                public void OnItemClick(View view, int position) {
+                    Toast.makeText(getActivity().getApplication(), "asd", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            moviesRecyclerView.setAdapter(myRecyclerViewAdapter);
+
             return rootView;
         }
     }
