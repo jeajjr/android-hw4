@@ -1,13 +1,45 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity$PlaceholderFragment">
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" tools:context="com.almas.hw3.almasapp3.ListViewFragment">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout"
+        android:gravity="center_horizontal">
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select all"
+            android:id="@+id/buttonMoviesSelectAll"
+            android:layout_alignTop="@+id/buttonMoviesDelete"
+            android:layout_toStartOf="@+id/buttonMoviesClearAll" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear All"
+            android:id="@+id/buttonMoviesClearAll"
+            android:layout_alignTop="@+id/buttonMoviesSelectAll"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete"
+            android:id="@+id/buttonMoviesDelete"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/buttonMoviesClearAll" />
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/cardList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/linearLayout" />
 
 
 </RelativeLayout>

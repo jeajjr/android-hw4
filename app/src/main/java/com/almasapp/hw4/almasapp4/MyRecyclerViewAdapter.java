@@ -66,7 +66,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             vTitle.setText((String) movie.get("name"));
             vDescription.setText((String) movie.get("description"));
             vIcon.setImageResource((Integer) movie.get("image"));
-            vCheckBox.setChecked((Boolean) movie.get("selection"));
+            vCheckBox.setChecked((Boolean) movie.get("selected"));
             ratingBar.setRating((int) Double.parseDouble(movie.get("rating").toString()) + 1);
         }
     }

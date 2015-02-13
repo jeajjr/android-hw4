@@ -5,11 +5,13 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.HashMap;
@@ -57,6 +59,7 @@ public class MainActivity extends ActionBarActivity {
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment {
+        final String TAG = "PlaceholderFragment";
 
         public PlaceholderFragment() {
         }
@@ -78,16 +81,58 @@ public class MainActivity extends ActionBarActivity {
                 @Override
                 public void OnItemLongClick(View view, int position) {
                     movieData.getMoviesList().add(position, (HashMap) ((HashMap) movieData.getItem(position)).clone());
-                    myRecyclerViewAdapter.notifyItemChanged(position);
+                    myRecyclerViewAdapter.notifyDataSetChanged();
+                    Log.d(TAG, "longClick item " + position);
                 }
 
                 @Override
                 public void OnItemClick(View view, int position) {
-                    Toast.makeText(getActivity().getApplication(), "asd", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity().getApplication(), movieData.getItem(position).get("name").toString(), Toast.LENGTH_SHORT).show();
                 }
             });
 
             moviesRecyclerView.setAdapter(myRecyclerViewAdapter);
+
+            Button selectAll = (Button) rootView.findViewById(R.id.buttonMoviesSelectAll);
+            selectAll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    for (int i = 0; i < movieData.getSize(); i++)
+                        movieData.getItem(i).put("selected", true);
+                    myRecyclerViewAdapter.notifyDataSetChanged();
+                }
+            });
+
+            Button clearAll = (Button) rootView.findViewById(R.id.buttonMoviesClearAll);
+            clearAll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    for (int i = 0; i < movieData.getSize(); i++)
+                        movieData.getItem(i).put("selected", false);
+                    myRecyclerViewAdapter.notifyDataSetChanged();
+                }
+            });
+
+            Button delete = (Button) rootView.findViewById(R.id.buttonMoviesDelete);
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int deleted = 0;
+
+                    for (int i = 0; i < movieData.getSize(); ) {
+                        if ( (Boolean) movieData.getItem(i).get("selected")) {
+                            movieData.removeItem(i);
+                            deleted++;
+                        }
+                        else
+                            i++;
+                    }
+                    myRecyclerViewAdapter.notifyDataSetChanged();
+
+                    Toast.makeText(getActivity(), deleted + " movies were deleted", Toast.LENGTH_SHORT).show();
+                }
+            });
+
 
             return rootView;
         }
