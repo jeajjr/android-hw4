@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -20,7 +22,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     private List<Map<String, ?>> mDataSet;
     private Context context;
-    OnItemClickListener mItemClickListener;
+    OnItemClickListener onItemClickListener;
+    OnCheckBoxClickListener onCheckBoxClickListener;
 
     public MyRecyclerViewAdapter(Context context, List<Map<String, ?>> mDataSet) {
         this.mDataSet = mDataSet;
@@ -45,8 +48,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mItemClickListener != null) {
-                        mItemClickListener.OnItemClick(v, getPosition());
+                    if (onItemClickListener != null) {
+                        onItemClickListener.onItemClick(v, getPosition());
                     }
                 }
             });
@@ -54,10 +57,19 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             v.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    if (mItemClickListener != null) {
-                        mItemClickListener.OnItemLongClick(v, getPosition());
+                    if (onItemClickListener != null) {
+                        onItemClickListener.onItemLongClick(v, getPosition());
                     }
                     return true;
+                }
+            });
+
+            vCheckBox.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    if (onCheckBoxClickListener != null) {
+                        onCheckBoxClickListener.onCheckBoxClick(v, getPosition());
+                    }
                 }
             });
         }
@@ -72,12 +84,20 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     }
 
     public interface OnItemClickListener {
-        public void OnItemClick(View view, int position);
-        public void OnItemLongClick(View view, int position);
+        public void onItemClick(View view, int position);
+        public void onItemLongClick(View view, int position);
+    }
+
+    public interface OnCheckBoxClickListener {
+        public void onCheckBoxClick(View view, int position);
     }
 
     public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
-        this.mItemClickListener = mItemClickListener;
+        this.onItemClickListener = mItemClickListener;
+    }
+
+    public void setOnCheckBoxClickListener(final OnCheckBoxClickListener onCheckBoxClickListener) {
+        this.onCheckBoxClickListener = onCheckBoxClickListener;
     }
 
     @Override
@@ -90,6 +110,10 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         else
             v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.row_normal, parent, false);
+
+        Animation animation = AnimationUtils.loadAnimation(context, R.anim.abc_fade_in);
+        animation.setDuration(1000);
+        v.startAnimation(animation);
 
         ViewHolder vh = new ViewHolder(v);
         return vh;

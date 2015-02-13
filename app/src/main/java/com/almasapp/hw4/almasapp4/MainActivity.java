@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,8 +14,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -59,7 +56,6 @@ public class MainActivity extends ActionBarActivity {
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment {
-        final String TAG = "PlaceholderFragment";
 
         MovieData movieData;
 
@@ -82,19 +78,26 @@ public class MainActivity extends ActionBarActivity {
             moviesRecyclerView.setHasFixedSize(true);
             moviesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+
             //set adapter
             final MyRecyclerViewAdapter myRecyclerViewAdapter = new MyRecyclerViewAdapter(getActivity(), movieData.getMoviesList());
             myRecyclerViewAdapter.SetOnItemClickListener(new MyRecyclerViewAdapter.OnItemClickListener() {
                 @Override
-                public void OnItemLongClick(View view, int position) {
-                    movieData.getMoviesList().add(position, (HashMap) ((HashMap) movieData.getItem(position)).clone());
+                public void onItemLongClick(View view, int position) {
+                    movieData.getMoviesList().add(position + 1, (HashMap) ((HashMap) movieData.getItem(position)).clone());
+                    movieData.getItem(position + 1).put("selected", false);
                     myRecyclerViewAdapter.notifyDataSetChanged();
-                    Log.d(TAG, "longClick item " + position);
                 }
 
                 @Override
-                public void OnItemClick(View view, int position) {
-                    Toast.makeText(getActivity().getApplication(), movieData.getItem(position).get("name").toString(), Toast.LENGTH_SHORT).show();
+                public void onItemClick(View view, int position) {
+                    Toast.makeText(getActivity(), movieData.getItem(position).get("name").toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            myRecyclerViewAdapter.setOnCheckBoxClickListener(new MyRecyclerViewAdapter.OnCheckBoxClickListener(){
+                public void onCheckBoxClick(View view, int position) {
+                    movieData.getItem(position).put("selected", !((Boolean) movieData.getItem(position).get("selected")));
                 }
             });
 
@@ -136,7 +139,19 @@ public class MainActivity extends ActionBarActivity {
                     }
                     myRecyclerViewAdapter.notifyDataSetChanged();
 
-                    Toast.makeText(getActivity(), deleted + " movies were deleted", Toast.LENGTH_SHORT).show();
+                    String out;
+                    switch (deleted) {
+                        case 0:
+                            out = "No movies were deleted";
+                            break;
+                        case 1:
+                            out = "1 movie was deleted";
+                            break;
+                        default:
+                            out = deleted + " movies were deleted";
+                            break;
+                    }
+                    Toast.makeText(getActivity(), out, Toast.LENGTH_SHORT).show();
                 }
             });
 
