@@ -86,7 +86,7 @@ public class MainActivity extends ActionBarActivity {
                 public void onItemLongClick(View view, int position) {
                     movieData.getMoviesList().add(position + 1, (HashMap) ((HashMap) movieData.getItem(position)).clone());
                     movieData.getItem(position + 1).put("selected", false);
-                    myRecyclerViewAdapter.notifyDataSetChanged();
+                    myRecyclerViewAdapter.notifyItemInserted(position + 1);
                 }
 
                 @Override
@@ -133,11 +133,12 @@ public class MainActivity extends ActionBarActivity {
                         if ( (Boolean) movieData.getItem(i).get("selected")) {
                             movieData.removeItem(i);
                             deleted++;
+                            myRecyclerViewAdapter.notifyItemRemoved(i);
                         }
                         else
                             i++;
                     }
-                    myRecyclerViewAdapter.notifyDataSetChanged();
+
 
                     String out;
                     switch (deleted) {
