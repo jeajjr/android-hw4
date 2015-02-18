@@ -83,17 +83,26 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         }
     }
 
+    /**
+     * OnItemClickListener interface for clicks on list items.
+     * This design pattern allows the listener actions to be defined
+     * outside the adapter.
+     */
     public interface OnItemClickListener {
         public void onItemClick(View view, int position);
         public void onItemLongClick(View view, int position);
     }
 
-    public interface OnCheckBoxClickListener {
-        public void onCheckBoxClick(View view, int position);
-    }
-
     public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
         this.onItemClickListener = mItemClickListener;
+    }
+
+    /**
+     * OnCheckBoxClickListener interface for clicks on the item's CheckKBox.
+     */
+    public interface OnCheckBoxClickListener {
+        public void onCheckBoxClick(View view, int position);
+
     }
 
     public void setOnCheckBoxClickListener(final OnCheckBoxClickListener onCheckBoxClickListener) {

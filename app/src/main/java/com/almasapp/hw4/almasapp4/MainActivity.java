@@ -78,7 +78,6 @@ public class MainActivity extends ActionBarActivity {
             moviesRecyclerView.setHasFixedSize(true);
             moviesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-
             //set adapter
             final MyRecyclerViewAdapter myRecyclerViewAdapter = new MyRecyclerViewAdapter(getActivity(), movieData.getMoviesList());
             myRecyclerViewAdapter.SetOnItemClickListener(new MyRecyclerViewAdapter.OnItemClickListener() {
@@ -139,7 +138,6 @@ public class MainActivity extends ActionBarActivity {
                             i++;
                     }
 
-
                     String out;
                     switch (deleted) {
                         case 0:
@@ -155,7 +153,6 @@ public class MainActivity extends ActionBarActivity {
                     Toast.makeText(getActivity(), out, Toast.LENGTH_SHORT).show();
                 }
             });
-
 
             return rootView;
         }
